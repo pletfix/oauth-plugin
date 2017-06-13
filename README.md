@@ -5,6 +5,14 @@
 This plugin provides a OAuth service to authenticate the user through the socialite provider such like Facebook or 
 Dropbox.
 
+Currently the following providers are integrated:
+
+- Dropbox
+- Facebook
+- GitHub
+
+You are welcome when you make a pull request with other providers.
+
 ## Installation 
 
 Fetch the package by running the following terminal command under the application's directory:
@@ -29,23 +37,21 @@ the views as you wish:
 If you like to use an another root path, have a look in the plugin's route entries in `./vendor/pletfix/ldap/config/routes.php`. 
 You can override  or modify the route entries in the application's route file `./config/boot/routes.php` like you wish:
 
-    $route->get('auth/ldap',  'Auth\LdapController@showForm');
-    $route->post('auth/ldap', 'Auth\LdapController@login');
+    $route->get('auth/oauth/{provider}',  'Auth\OAuthController@login');
+    $route->post('auth/oauth/{provider}', 'Auth\OAuthController@login');
  
 ## Usage
 
 ### User Authentication
 
-Enter the following URL into your Browser to open the login form:
+Enter the following URL into your Browser to redirect to the login screen on your OAuth provider:
 
-    https://<your-application>/auth/ldap
-
-![Screenshot1](https://raw.githubusercontent.com/pletfix/ldap/master/screenshot1.png)
-
-#### User Role
-
-The "memberof" attribute is used to determine the user role. You may edit the member mapping in the configuration file 
-`config/ldap`.
+    https://<your-application>/oauth/<provider>
+    
+You must replace the placeholder "<provider>" with one of the providers configured in the configuration file `config/oauth.php`,
+for example with Facebook:
+    
+    https://<your-application>/oauth/facebook
 
 #### User Model
 
@@ -53,59 +59,72 @@ If you have defined a user model in the configuration, the user attributes are s
 By default, the user model from the [Pletfix Application Skeleton](https://github.com/pletfix/app) is used and no 
 further migration is required.
 
-### LDAP Service
+### OAuth Service
 
-#### Accessing the LDAP service
+#### Accessing the OAuth service
 
-You can get an instance of the LDAP Service from the Dependency Injector:
+You can get an instance of the OAuth Service from the Dependency Injector via the OAuth Factory:
 
-    /** @var Pletfix\Ldap\Services\Contracts\Ldap $ldap */
-    $ldap = DI::getInstance()->get('ldap');
+    /** @var Pletfix\OAuth\Services\Contracts\OAuth $oauth */
+    $oauth = DI::getInstance()->get('oauth-factory')->provider($provider);
     
-You can also use the `ldap()` function to get the LDAP service, it is more comfortable:
+You can also use the `oauth()` function to get the OAuth service, it is more comfortable:
        
-    $ldap = ldap();
+    $oauth = oauth();
 
 #### Available Methods
 
-#### `search`
+#### `authorize()`
 
-Search LDAP tree and get all result entries.
+Authorize the application through the OAuth provider.
 
-    $users = $ldap->search('userprincipalname=Fr*');
-
-#### `getUsers`
-
-Get the user entries.
-
-    $users = $ldap->getUsers();
+    if (!$oauth->authorize()) {
+        return redirect('', [], [
+            'errors' => ['Forbidden!']
+        ]);
+    }
     
-You may also set a filter for the `userprincipalname` attribute:
+After authorization the access token is set and you can get the account information with the `getAccount` method.  
+
+#### `getAccount()`
+
+Get the authenticated account information.
+
+    $user = $oauth->getAccount();
     
-    $users = $ldap->getUsers('Fr*');
+The return value is an array with following attributes:
+<pre>
+- id    (string) The unique identifier of the account.
+- name  (string) The display name of the user.
+- email (string) The email address of the user.
+</pre>
 
-#### `getUser`
+#### `setAccessToken`
 
-Get the user attributes by given username (userPrincipalName or samAccountName).
+Set the access token. 
 
-    $user = $ldap->getUser('FrankR');
-    
-You may define the attributes of the user in the configuration file `config/ldap`.            
+    $oauth->setAccessToken($accessToken);
 
-#### `authenticate`
+The access token is set automatically after the authorization, see the `authorize` method.
 
-Authenticate the user through the Active Directory.
+#### `getAccessToken()`
 
-    $isAuthenticated = $ldap->authenticate($username, $password);
+Get the access token.
 
-#### `getErrorCode`
+    $accessToken = $oauth->getAccessToken();
 
-Return the LDAP error code of the last LDAP command.
+The access token is available if the user was authenticated or if you have set a token manually by the `setAccessToken` 
+method.
+ 
+#### `hasAccessToken()`
 
-    $errorCode = $ldap->getErrorCode();
+Determine if the access token is exist.
+     
+    $isAuthorized = $oauth->hasAccessToken();
 
-#### `getErrorMessage`
+## Contribution Guide
 
-Return the LDAP error message of the last LDAP command.
+Are you missing a provider? Then fork the repository, add a new oauth driver in the `Socialites` folder and meke a pull 
+request. There are already a few classes in the `Socialites` folder, which you can orientate to the development. 
+You'll see, it's not too difficult. 
 
-    $errorMessage = $ldap->getErrorMessage();
