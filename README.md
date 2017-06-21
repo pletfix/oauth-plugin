@@ -128,4 +128,3 @@ Determine if the access token is exist.
 Are you missing a socialite driver? Then fork the repository, add a new driver in the `Socialites` folder and make 
 a pull request. There are already a few classes in the `Socialites` folder, which you can orientate to the development. 
 You'll see, it's not too difficult. 
-
