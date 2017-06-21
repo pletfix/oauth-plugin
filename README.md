@@ -28,13 +28,8 @@ After downloading, enter this command in your terminal to register the plugin:
 Open the configuration file `./config/oauth.php` under the application's directory and override the defaults if you wish.
    
 ## Customize
-    
-If you would like to modified the views of the plugin, copy them to the application's view directory, where you can edit 
-the views as you wish:
-     
-    cp -R ./vendor/pletfix/oauth/views/* ./resources/views/
-    
-If you like to use an another route path, have a look in the plugin's route entries in `./vendor/pletfix/ldap/config/routes.php`. 
+        
+If you like to use an another route path, have a look in the plugin's route entries in `./vendor/pletfix/oauth/config/routes.php`. 
 You can override  or modify the route entries in the application's route file `./config/boot/routes.php` like you wish:
 
     $route->get('auth/oauth/{provider}',  'Auth\OAuthController@login');
@@ -58,6 +53,12 @@ for example with Facebook:
 If you have defined a user model in the configuration, the user attributes are stored in the database.
 By default, the user model from the [Pletfix Application Skeleton](https://github.com/pletfix/app) is used and no 
 further migration is required.
+
+#### Logout
+
+You may invoke just the following command to logout the user: 
+ 
+    auth()->logout();
 
 ### OAuth Service
 
