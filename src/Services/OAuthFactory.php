@@ -2,6 +2,7 @@
 
 namespace Pletfix\OAuth\Services;
 
+use Pletfix\OAuth\Services\Contracts\OAuth;
 use Pletfix\OAuth\Services\Contracts\OAuthFactory as OAuthFactoryContract;
 
 use InvalidArgumentException;
@@ -11,7 +12,7 @@ class OAuthFactory implements OAuthFactoryContract
     /**
      * Instances of OAuth.
      *
-     * @var \Core\Services\Contracts\OAuth[]
+     * @var OAuth[]
      */
     private $oauth = [];
 
@@ -30,10 +31,20 @@ class OAuthFactory implements OAuthFactoryContract
     private $pluginDrivers;
 
     /**
-     * Create a new factory instance.
+     * Manifest file of classes.
+     *
+     * @var string
      */
-    public function __construct()
+    private $pluginManifestOfClasses;
+
+    /**
+     * Create a new factory instance.
+     *
+     * @param string|null $pluginManifestOfClasses
+     */
+    public function __construct($pluginManifestOfClasses = null)
     {
+        $this->pluginManifestOfClasses = $pluginManifestOfClasses ?: manifest_path('plugins/classes.php');
         $this->defaultProvider = config('oauth.default');
     }
 
@@ -84,11 +95,10 @@ class OAuthFactory implements OAuthFactoryContract
     private function getPluginDriver($class)
     {
         if ($this->pluginDrivers === null) {
-            $manifest = manifest_path('plugins/classes.php');
-            if (file_exists($manifest)) {
+            if (file_exists($this->pluginManifestOfClasses)) {
                 /** @noinspection PhpIncludeInspection */
-                $classes = include $manifest;
-                $this->pluginDrivers = isset($classes['Socialites']) ? $classes['Socialites'] : [];
+                $classes = include $this->pluginManifestOfClasses;
+                $this->pluginDrivers = isset($classes['Socialites']) ? $classes['Socialites'] : []; // todo Socialites in OAuth ändern
             }
             else {
                 $this->pluginDrivers = [];

@@ -2,6 +2,7 @@
 
 namespace Pletfix\OAuth\Socialites;
 
+use Core\Services\Contracts\Response;
 use Pletfix\OAuth\Services\AbstractOAuth2;
 
 class Dropbox extends AbstractOAuth2
@@ -44,7 +45,7 @@ class Dropbox extends AbstractOAuth2
         ]);
 
         if (!isset($token->access_token)) {
-            abort(HTTP_STATUS_FORBIDDEN);
+            abort(Response::HTTP_FORBIDDEN);
         }
 
         return $token->access_token;
@@ -59,7 +60,7 @@ class Dropbox extends AbstractOAuth2
         $account = $this->send('https://api.dropboxapi.com/1/account/info');
 
         if (!isset($account->uid)) {
-            abort(HTTP_STATUS_FORBIDDEN);
+            abort(Response::HTTP_FORBIDDEN);
         }
 
         return [

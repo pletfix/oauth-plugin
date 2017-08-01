@@ -2,6 +2,7 @@
 
 namespace Pletfix\OAuth\Socialites;
 
+use Core\Services\Contracts\Response;
 use Pletfix\OAuth\Services\AbstractOAuth2;
 
 class GitHub extends AbstractOAuth2
@@ -45,7 +46,7 @@ class GitHub extends AbstractOAuth2
         ]);
 
         if (!isset($token->access_token) || !isset($token->scope) || !in_array('user:email', explode(',', $token->scope))) {
-            abort(HTTP_STATUS_FORBIDDEN);
+            abort(Response::HTTP_FORBIDDEN);
         }
 
         return $token->access_token;
@@ -60,7 +61,7 @@ class GitHub extends AbstractOAuth2
         $account = $this->send('https://api.github.com/user');
 
         if (!isset($account->id)) {
-            abort(HTTP_STATUS_FORBIDDEN);
+            abort(Response::HTTP_FORBIDDEN);
         }
 
         return [

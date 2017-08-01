@@ -41,9 +41,9 @@ class OAuthController extends Controller
         $principal = $account['id'] . '@' . $provider;
 
         // Load the User entity from the database or create a new Model if not exist.
-        $user = User::whereIs('principal', $principal)->first();
+        $user = User::where('principal', $principal)->first();
         if ($user === null && !empty($account['email'])) {
-            $user = User::whereIs('email', $account['email'])->first();
+            $user = User::where('email', $account['email'])->first();
         }
         if ($user === null) {
             $user = new User;

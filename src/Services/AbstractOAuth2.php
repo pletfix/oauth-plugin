@@ -2,6 +2,7 @@
 
 namespace Pletfix\OAuth\Services;
 
+use Core\Services\Contracts\Response;
 use Pletfix\OAuth\Exceptions\OAuthException;
 use Pletfix\OAuth\Services\Contracts\OAuth as OAuthContract;
 
@@ -91,7 +92,7 @@ abstract class AbstractOAuth2 implements OAuthContract
             $state = session('_oauth_state');
             session()->delete('_oauth_state');
             if (!isset($input['state']) || $state !== $input['state']) {
-                abort(HTTP_STATUS_FORBIDDEN);
+                abort(Response::HTTP_FORBIDDEN);
             }
 
             $this->accessToken = $this->exchangeAuthCodeForAccessToken($state, $input['code']);
