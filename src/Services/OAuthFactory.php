@@ -98,7 +98,7 @@ class OAuthFactory implements OAuthFactoryContract
             if (file_exists($this->pluginManifestOfClasses)) {
                 /** @noinspection PhpIncludeInspection */
                 $classes = include $this->pluginManifestOfClasses;
-                $this->pluginDrivers = isset($classes['Socialites']) ? $classes['Socialites'] : []; // todo Socialites in OAuth ändern
+                $this->pluginDrivers = isset($classes['SocialMediaDrivers']) ? $classes['SocialMediaDrivers'] : [];
             }
             else {
                 $this->pluginDrivers = [];

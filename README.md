@@ -2,8 +2,8 @@
 
 ## About This
 
-This plugin provides a OAuth service to authenticate the user through the socialite provider such like Facebook or 
-Dropbox.
+This plugin provides a OAuth service to authenticate the user through the social networking service provider such like 
+Facebook or Dropbox.
 
 Currently the following drivers are integrated:
 
@@ -125,6 +125,6 @@ Determine if the access token is exist.
 
 ## Contribution Guide
 
-Are you missing a socialite driver? Then fork the repository, add a new driver in the `Socialites` folder and make 
-a pull request. There are already a few classes in the `Socialites` folder, which you can orientate to the development. 
-You'll see, it's not too difficult. 
+Are you missing a socialite driver? Then fork the repository, add a new driver in the `SocialMediaDrivers` folder and 
+make a pull request. There are already a few classes in the `SocialMediaDrivers` folder, which you can orientate to the 
+development. You'll see, it's not too difficult. 

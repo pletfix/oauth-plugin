@@ -1,6 +1,6 @@
 <?php
 
-namespace Pletfix\OAuth\Socialites;
+namespace Pletfix\OAuth\SocialMediaDrivers;
 
 use Core\Services\Contracts\Response;
 use Pletfix\OAuth\Services\AbstractOAuth2;

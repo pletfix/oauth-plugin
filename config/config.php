@@ -7,7 +7,7 @@ return [
      * Default OAuth Provider
      * ----------------------------------------------------------------
      *
-     * Here you may specify which of the authentication store below you wish to use as your default store.
+     * Here you may specify which of the providers below you wish to use as your default.
      */
 
     'default' => env('OAUTH_PROVIDER', 'Facebook'),
