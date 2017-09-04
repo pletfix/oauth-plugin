@@ -1,11 +1,11 @@
 <?php
 
-namespace Pletfix\OAuth\SocialMediaDrivers;
+namespace Pletfix\OAuth\Drivers\SocialMedia;
 
 use Core\Services\Contracts\Response;
 use Pletfix\OAuth\Services\AbstractOAuth2;
 
-class GitHub extends AbstractOAuth2
+class Facebook extends AbstractOAuth2
 {
     /**
      * Get the full URL to redirect to the login screen on the OAuth provider.
@@ -17,11 +17,11 @@ class GitHub extends AbstractOAuth2
      */
     protected function loginScreenURL($state)
     {
-        return 'https://github.com/login/oauth/authorize?' . http_build_query([
+        return 'https://www.facebook.com/dialog/oauth?' . http_build_query([
             'client_id'     => $this->config['client_id'],
             'redirect_uri'  => $this->config['redirect_to'],
             'state'         => $state,
-            'scope'         => 'user:email',
+            'scope'         => 'email',
             'response_type' => 'code',
         ]);
     }
@@ -37,15 +37,14 @@ class GitHub extends AbstractOAuth2
      */
     protected function exchangeAuthCodeForAccessToken($state, $code)
     {
-        $token = $this->send('https://github.com/login/oauth/access_token', [
+        $token = $this->send('https://graph.facebook.com/oauth/access_token', [
             'client_id'     => $this->config['client_id'],
             'client_secret' => $this->config['client_secret'],
             'redirect_uri'  => $this->config['redirect_to'],
-            'state'         => $state,
             'code'          => $code,
         ]);
 
-        if (!isset($token->access_token) || !isset($token->scope) || !in_array('user:email', explode(',', $token->scope))) {
+        if (!isset($token->access_token)) {
             abort(Response::HTTP_FORBIDDEN);
         }
 
@@ -58,7 +57,7 @@ class GitHub extends AbstractOAuth2
     public function getAccount()
     {
         # fetch user information
-        $account = $this->send('https://api.github.com/user');
+        $account = $this->send('https://graph.facebook.com/me?fields=id,name,email');
 
         if (!isset($account->id)) {
             abort(Response::HTTP_FORBIDDEN);

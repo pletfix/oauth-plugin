@@ -1,11 +1,11 @@
 <?php
 
-namespace Pletfix\OAuth\SocialMediaDrivers;
+namespace Pletfix\OAuth\Drivers\SocialMedia;
 
 use Core\Services\Contracts\Response;
 use Pletfix\OAuth\Services\AbstractOAuth2;
 
-class Facebook extends AbstractOAuth2
+class Dropbox extends AbstractOAuth2
 {
     /**
      * Get the full URL to redirect to the login screen on the OAuth provider.
@@ -17,11 +17,10 @@ class Facebook extends AbstractOAuth2
      */
     protected function loginScreenURL($state)
     {
-        return 'https://www.facebook.com/dialog/oauth?' . http_build_query([
+        return 'https://www.dropbox.com/oauth2/authorize?' . http_build_query([
             'client_id'     => $this->config['client_id'],
             'redirect_uri'  => $this->config['redirect_to'],
             'state'         => $state,
-            'scope'         => 'email',
             'response_type' => 'code',
         ]);
     }
@@ -37,11 +36,12 @@ class Facebook extends AbstractOAuth2
      */
     protected function exchangeAuthCodeForAccessToken($state, $code)
     {
-        $token = $this->send('https://graph.facebook.com/oauth/access_token', [
+        $token = $this->send('https://api.dropboxapi.com/oauth2/token', [
             'client_id'     => $this->config['client_id'],
             'client_secret' => $this->config['client_secret'],
             'redirect_uri'  => $this->config['redirect_to'],
             'code'          => $code,
+            'grant_type'    => 'authorization_code',
         ]);
 
         if (!isset($token->access_token)) {
@@ -57,15 +57,15 @@ class Facebook extends AbstractOAuth2
     public function getAccount()
     {
         # fetch user information
-        $account = $this->send('https://graph.facebook.com/me?fields=id,name,email');
+        $account = $this->send('https://api.dropboxapi.com/1/account/info');
 
-        if (!isset($account->id)) {
+        if (!isset($account->uid)) {
             abort(Response::HTTP_FORBIDDEN);
         }
 
         return [
-            'id'    => $account->id,
-            'name'  => $account->name,
+            'id'    => $account->uid,
+            'name'  => $account->display_name,
             'email' => isset($account->email) ? $account->email : null,
         ];
     }

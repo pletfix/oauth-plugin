@@ -1,6 +1,6 @@
 <?php
 
-namespace Pletfix\OAuth\Controllers\Auth;
+namespace Pletfix\OAuth\Controllers;
 
 use App\Controllers\Controller;
 use App\Models\User;
@@ -31,9 +31,7 @@ class OAuthController extends Controller
         /** @var \Pletfix\OAuth\Services\Contracts\OAuth $oauth */
         $oauth = DI::getInstance()->get('oauth-factory')->provider($provider);
         if (!$oauth->authorize()) {
-            return redirect('', [], [
-                'errors' => ['Zugriff nicht gestattet!']
-            ]);
+            return redirect('')->withError('Zugriff nicht gestattet!');
         }
 
         // Get the account information.

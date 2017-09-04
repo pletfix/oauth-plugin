@@ -35,16 +35,16 @@ class OAuthFactory implements OAuthFactoryContract
      *
      * @var string
      */
-    private $pluginManifestOfClasses;
+    private $pluginManifestOfDrivers;
 
     /**
      * Create a new factory instance.
      *
-     * @param string|null $pluginManifestOfClasses
+     * @param string|null $pluginManifestOfDrivers
      */
-    public function __construct($pluginManifestOfClasses = null)
+    public function __construct($pluginManifestOfDrivers = null)
     {
-        $this->pluginManifestOfClasses = $pluginManifestOfClasses ?: manifest_path('plugins/classes.php');
+        $this->pluginManifestOfDrivers = $pluginManifestOfDrivers ?: manifest_path('plugins/drivers.php');
         $this->defaultProvider = config('oauth.default');
     }
 
@@ -71,19 +71,22 @@ class OAuthFactory implements OAuthFactoryContract
         }
 
         $class = $config['driver'];
-        if (file_exists(app_path('Services/OAuth/' .  $class . '.php'))) {
-            $class = '\\App\\Services\\OAuth\\' . $class;
+        if (file_exists(app_path('Drivers/SocialMedia/' .  $class . '.php'))) { // todo als helper create_driver($type, $name) auslagern
+            $class = '\\App\\Drivers\\SocialMedia\\' . $class;
         }
         else if (($pluginDriver = $this->getPluginDriver($class)) !== null) {
             $class = $pluginDriver;
         }
+        else if (file_exists(__DIR__ . '/../Drivers/' .  str_replace('\\', '/', $class) . '.php')) {
+            $class = '\\Core\\Drivers\\SocialMedia\\' . $class;
+        }
         else {
-            $class = '\\Core\\Services\\OAuth\\' . $class;
+            throw new InvalidArgumentException('Driver "' . $class . '" not found.');
         }
 
-        $provider = new $class($config);
+        $oauth = new $class($config);
 
-        return $this->oauth[$name] = $provider;
+        return $this->oauth[$name] = $oauth;
     }
 
     /**
@@ -95,16 +98,16 @@ class OAuthFactory implements OAuthFactoryContract
     private function getPluginDriver($class)
     {
         if ($this->pluginDrivers === null) {
-            if (file_exists($this->pluginManifestOfClasses)) {
+            if (file_exists($this->pluginManifestOfDrivers)) {
                 /** @noinspection PhpIncludeInspection */
-                $classes = include $this->pluginManifestOfClasses;
-                $this->pluginDrivers = isset($classes['SocialMediaDrivers']) ? $classes['SocialMediaDrivers'] : [];
+                $classes = include $this->pluginManifestOfDrivers;
+                $this->pluginDrivers = isset($classes['SocialMedia']) ? $classes['SocialMedia'] : [];
             }
             else {
                 $this->pluginDrivers = [];
             }
         }
 
-        return isset($this->pluginDrivers[$class]) ? $this->pluginDrivers[$class] : null;
+        return isset($this->pluginDrivers[$class]) && count($this->pluginDrivers[$class]) == 1 ? $this->pluginDrivers[$class][0] : null;
     }
 }

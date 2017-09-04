@@ -32,8 +32,8 @@ Open the configuration file `./config/oauth.php` under the application's directo
 If you like to use an another route path, have a look in the plugin's route entries in `./vendor/pletfix/oauth/config/routes.php`. 
 You can override  or modify the route entries in the application's route file `./config/boot/routes.php` like you wish:
 
-    $route->get('auth/oauth/{provider}',  'Auth\OAuthController@login');
-    $route->post('auth/oauth/{provider}', 'Auth\OAuthController@login');
+    $route->get('oauth/{provider}/login',  'OAuthController@login');
+    $route->post('oauth/{provider}/login', 'OAuthController@login');
  
 ## Usage
 
@@ -41,12 +41,12 @@ You can override  or modify the route entries in the application's route file `.
 
 Enter the following URL into your Browser to redirect to the login screen on your OAuth provider:
 
-    https://<your-application>/oauth/<provider>
+    https://<your-application>/oauth/<provider>/login
     
 You must replace the placeholder "<provider>" with one of the providers configured in the configuration file `config/oauth.php`,
 for example with Facebook:
     
-    https://<your-application>/oauth/facebook
+    https://<your-application>/oauth/facebook/login
 
 #### User Model
 

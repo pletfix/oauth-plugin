@@ -1,11 +1,11 @@
 <?php
 
-namespace Pletfix\OAuth\SocialMediaDrivers;
+namespace Pletfix\OAuth\Drivers\SocialMedia;
 
 use Core\Services\Contracts\Response;
 use Pletfix\OAuth\Services\AbstractOAuth2;
 
-class Dropbox extends AbstractOAuth2
+class GitHub extends AbstractOAuth2
 {
     /**
      * Get the full URL to redirect to the login screen on the OAuth provider.
@@ -17,10 +17,11 @@ class Dropbox extends AbstractOAuth2
      */
     protected function loginScreenURL($state)
     {
-        return 'https://www.dropbox.com/oauth2/authorize?' . http_build_query([
+        return 'https://github.com/login/oauth/authorize?' . http_build_query([
             'client_id'     => $this->config['client_id'],
             'redirect_uri'  => $this->config['redirect_to'],
             'state'         => $state,
+            'scope'         => 'user:email',
             'response_type' => 'code',
         ]);
     }
@@ -36,15 +37,15 @@ class Dropbox extends AbstractOAuth2
      */
     protected function exchangeAuthCodeForAccessToken($state, $code)
     {
-        $token = $this->send('https://api.dropboxapi.com/oauth2/token', [
+        $token = $this->send('https://github.com/login/oauth/access_token', [
             'client_id'     => $this->config['client_id'],
             'client_secret' => $this->config['client_secret'],
             'redirect_uri'  => $this->config['redirect_to'],
+            'state'         => $state,
             'code'          => $code,
-            'grant_type'    => 'authorization_code',
         ]);
 
-        if (!isset($token->access_token)) {
+        if (!isset($token->access_token) || !isset($token->scope) || !in_array('user:email', explode(',', $token->scope))) {
             abort(Response::HTTP_FORBIDDEN);
         }
 
@@ -57,15 +58,15 @@ class Dropbox extends AbstractOAuth2
     public function getAccount()
     {
         # fetch user information
-        $account = $this->send('https://api.dropboxapi.com/1/account/info');
+        $account = $this->send('https://api.github.com/user');
 
-        if (!isset($account->uid)) {
+        if (!isset($account->id)) {
             abort(Response::HTTP_FORBIDDEN);
         }
 
         return [
-            'id'    => $account->uid,
-            'name'  => $account->display_name,
+            'id'    => $account->id,
+            'name'  => $account->name,
             'email' => isset($account->email) ? $account->email : null,
         ];
     }
