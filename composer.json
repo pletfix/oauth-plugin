@@ -1,5 +1,5 @@
 {
-    "name": "pletfix/oauth",
+    "name": "pletfix/oauth-plugin",
     "description": "OAuth Plugin for Pletfix",
     "keywords": ["pletfix", "plugin", "oauth"],
     "authors": [
