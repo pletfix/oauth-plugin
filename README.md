@@ -18,11 +18,11 @@ You are welcome when you make a pull request with other socialite drivers.
 
 Fetch the package by running the following terminal command under the application's directory:
 
-    composer require pletfix/oauth
+    composer require pletfix/oauth-plugin
 
 After downloading, enter this command in your terminal to register the plugin:
 
-    php console plugin pletfix/oauth 
+    php console plugin pletfix/oauth-plugin 
 
 ## Environment and Configuration
     
@@ -30,7 +30,7 @@ Open the configuration file `./config/oauth.php` under the application's directo
    
 ## Customize
         
-If you like to use an another route path, have a look in the plugin's route entries in `./vendor/pletfix/oauth/config/routes.php`. 
+If you like to use an another route path, have a look in the plugin's route entries in `./vendor/pletfix/oauth-plugin/config/routes.php`. 
 You can override  or modify the route entries in the application's route file `./config/boot/routes.php` like you wish:
 
     $route->get('oauth/{provider}/login',  'OAuthController@login');
@@ -126,6 +126,6 @@ Determine if the access token is exist.
 
 ## Contribution Guide
 
-Are you missing a socialite driver? Then fork the repository, add a new driver in the `SocialMediaDrivers` folder and 
-make a pull request. There are already a few classes in the `SocialMediaDrivers` folder, which you can orientate to the 
-development. You'll see, it's not too difficult. 
+Are you missing a socialite driver? Then fork the repository, add a new driver in the `Drivers/SocialMedia` directory 
+and make a pull request. There are already a few drivers, which you can orientate to the development. You'll see, it's 
+not too difficult. 
