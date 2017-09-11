@@ -1,6 +1,7 @@
 {
     "name": "pletfix/oauth",
     "description": "OAuth Plugin for Pletfix",
+    "keywords": ["pletfix", "plugin", "oauth"],
     "authors": [
         {
             "name": "Frank Rohlfing",

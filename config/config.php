@@ -49,6 +49,14 @@ return [
             'user_agent'    => 'Your Apllication Name',
         ],
 
+        // Visit https://developer.spotify.com to create a Spotify account.
+        'spotify' => [
+            'driver'        => 'Spotify',
+            'client_id'     => 'Your_Spotify_Client_id',
+            'client_secret' => env('SPOTIFY_CLIENT_SECRET'),
+            'redirect_to'   => env('SPOTIFY_REDIRECT_URI'),
+        ],
+
     ],
 
     /**

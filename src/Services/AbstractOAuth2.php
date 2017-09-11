@@ -5,6 +5,7 @@ namespace Pletfix\OAuth\Services;
 use Core\Services\Contracts\Response;
 use Pletfix\OAuth\Exceptions\OAuthException;
 use Pletfix\OAuth\Services\Contracts\OAuth as OAuthContract;
+use RuntimeException;
 
 /**
  * Examples for OAuth2 providers:
@@ -182,7 +183,15 @@ abstract class AbstractOAuth2 implements OAuthContract
         if ($post !== null) {
             curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($post));
         }
+        if (($proxy = config('app.http_proxy')) !== null) {
+            curl_setopt($ch, CURLOPT_PROXY, $proxy);
+        }
         $response = curl_exec($ch);
+        $error = empty($response) ? curl_error($ch) : null;
+        curl_close($ch);
+        if ($error !== null) {
+            throw new RuntimeException('cURL request failed: ' . $error);
+        }
 
         $result = json_decode($response);
         if (!empty($result->error)) {

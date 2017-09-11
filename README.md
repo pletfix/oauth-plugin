@@ -10,6 +10,7 @@ Currently the following drivers are integrated:
 - Dropbox
 - Facebook
 - GitHub
+- Spotify
 
 You are welcome when you make a pull request with other socialite drivers.
 
