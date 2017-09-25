@@ -31,7 +31,7 @@ class OAuthController extends Controller
         /** @var \Pletfix\OAuth\Services\Contracts\OAuth $oauth */
         $oauth = DI::getInstance()->get('oauth-factory')->provider($provider);
         if (!$oauth->authorize()) {
-            return redirect('')->withError('Zugriff nicht gestattet!');
+            return redirect('')->withError(t('oauth.login.failed'));
         }
 
         // Get the account information.
@@ -58,5 +58,17 @@ class OAuthController extends Controller
         $url = session('origin_url', url($this->redirectTo));
 
         return response()->redirect($url);
+    }
+
+    /**
+     * Log off the user from the application.
+     *
+     * @return Response
+     */
+    public function logout()
+    {
+        auth()->logout();
+
+        return redirect($this->redirectTo);
     }
 }

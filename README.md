@@ -12,7 +12,7 @@ Currently the following drivers are integrated:
 - GitHub
 - Spotify
 
-You are welcome when you make a pull request with other socialite drivers.
+You are welcome when you make a pull request with other social media drivers.
 
 ## Installation 
 
@@ -30,12 +30,12 @@ Open the configuration file `./config/oauth.php` under the application's directo
    
 ## Customize
         
-If you like to use an another route path, have a look in the plugin's route entries in `./vendor/pletfix/oauth-plugin/config/routes.php`. 
-You can override  or modify the route entries in the application's route file `./config/boot/routes.php` like you wish:
+If you like to use another route paths, copy the route entries from `./vendor/pletfix/oauth-plugin/config/routes.php` 
+into the application's routing file `./config/boot/routes.php`, where you can modify them as you wish:
 
     $route->get('oauth/{provider}/login',  'OAuthController@login');
     $route->post('oauth/{provider}/login', 'OAuthController@login');
- 
+     
 ## Usage
 
 ### User Authentication
@@ -126,6 +126,6 @@ Determine if the access token is exist.
 
 ## Contribution Guide
 
-Are you missing a socialite driver? Then fork the repository, add a new driver in the `Drivers/SocialMedia` directory 
+Are you missing a social media driver? Then fork the repository, add a new driver in the `Drivers/SocialMedia` directory 
 and make a pull request. There are already a few drivers, which you can orientate to the development. You'll see, it's 
 not too difficult. 
