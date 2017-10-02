@@ -1,6 +1,6 @@
 <?php
 
-$router = Core\Services\DI::getInstance()->get('router');
+$router = Core\Application::router();
 
 // Authentication OAuth Routes
 $router->get('oauth/{provider}/login',  'OAuthController@login');
