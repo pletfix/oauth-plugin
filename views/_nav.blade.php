@@ -20,7 +20,7 @@
             <span class="caret"></span>
         </a>
         <ul class="dropdown-menu">
-            <li>
+            <li {!! is_active('oauth/logout') ? 'class="active"' : '' !!}>
                 <a href="{{url('oauth/logout')}}" onclick="event.preventDefault(); $(this).next().submit();">
                     <i class="fa fa-sign-out" aria-hidden="true"></i> {{t('oauth.nav.logout')}}
                 </a>
