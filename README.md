@@ -30,8 +30,8 @@ Open the configuration file `./config/oauth.php` under the application's directo
    
 ## Customize
         
-If you like to use another route paths, copy the route entries from `./vendor/pletfix/oauth-plugin/config/routes.php` 
-into the application's routing file `./config/boot/routes.php`, where you can modify them as you wish:
+If you like to use another route paths, copy the route entries from `./vendor/pletfix/oauth-plugin/boot/routes.php` 
+into the application's routing file `./boot/routes.php`, where you can modify them as you wish:
 
     $route->get('oauth/{provider}/login',  'OAuthController@login');
     $route->post('oauth/{provider}/login', 'OAuthController@login');
@@ -81,9 +81,7 @@ You can also use the `oauth()` function to get the OAuth service, it is more com
 Authorize the application through the OAuth provider.
 
     if (!$oauth->authorize()) {
-        return redirect('', [], [
-            'errors' => ['Forbidden!']
-        ]);
+        return redirect('')->withError('Forbidden!');
     }
     
 After authorization the access token is set and you can get the account information with the `getAccount` method.  
