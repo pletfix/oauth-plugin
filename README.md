@@ -40,7 +40,7 @@ into the application's routing file `./config/boot/routes.php`, where you can mo
 
 ### User Authentication
 
-Enter the following URL into your Browser to redirect to the login screen on your OAuth provider:
+Enter the following URL into your Browser to redirect to the login screen to your OAuth provider:
 
     https://<your-application>/oauth/<provider>/login
     
