@@ -22,14 +22,24 @@ Fetch the package by running the following terminal command under the applicatio
 
 After downloading, enter this command in your terminal to register the plugin:
 
-    php console plugin pletfix/oauth-plugin 
+    php console plugin pletfix/oauth-plugin --add-routes
 
 ## Environment and Configuration
     
 Open the configuration file `./config/oauth.php` under the application's directory and override the defaults if you wish.
    
 ## Customize
-        
+
+### View
+
+If you have installed the [Pletfix Application Skeleton](https://github.com/pletfix/app), you could add the necessary 
+menu items ("login" and "logout") by including the partial `_nav` in your `resources/views/app.blade.php` layout just 
+above the marker `{{--menu_point--}}`: 
+    
+       @include('oauth._nav')
+
+### Routes
+               
 If you like to use another route paths, copy the route entries from `./vendor/pletfix/oauth-plugin/boot/routes.php` 
 into the application's routing file `./boot/routes.php`, where you can modify them as you wish:
 
