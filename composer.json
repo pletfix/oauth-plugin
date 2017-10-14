@@ -2,6 +2,7 @@
     "name": "pletfix/oauth-plugin",
     "description": "OAuth Plugin for Pletfix",
     "keywords": ["pletfix", "plugin", "oauth"],
+    "license": "MIT",
     "authors": [
         {
             "name": "Frank Rohlfing",
